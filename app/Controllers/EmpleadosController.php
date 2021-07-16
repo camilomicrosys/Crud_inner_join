@@ -51,18 +51,21 @@ echo view('footer_header/footer');
 
 
 public function borrarUsuario($id){
- //lo primero es mirar que rango tiene ya que si es admin, o asesor, solo seborra en usuarios y en liquidaciones con el id de usuasio en las 2 tablas en usuarios y en liquidaciones si tiene liquidaciones si tienen alguna liquidacion y si es  cliente hay que borrarlo de usuarios y clientes y si tienen liquidaciones entonces de 3 tablas
+ 
  $obj_administrador = new EmpleadosModel();
- $datos_usuario=$obj_administrador->pasoTodosLosDatosUsuarioaEditar($id);
+ $verificar_innerjoin=$obj_administrador->traerLiquidacionPorIdEmpleado($id);
+ //verifico que el cliente no este en 2 tablas y si esta lo borro de las 2
+$existe=count($verificar_innerjoin);
 
+if($existe>0){
+  //Si esta en ambas tablas lo borramos en cascada
+$obj_administrador->borrarClienteTabSolici($id);
 $obj_administrador->borrarClienTabEmpleado($id);
-/*ejecutamos eliminacion en todas las tablas en este orden por que si no sale el problema de foranea, cuando me salga ese problema voy myadmin y empieso a borrarlas alla manual y cuando alla no me salga el problema de foranea lo traigo aca y borro en mismo orden 
-$obj_administrador->borrarTablaLiquidaciones($id);
-$obj_administrador->borrarClienTabUsua($id);
-$obj_administrador->borrarClienTabClient($id_cliente);
-*/
 return redirect()->to(base_url() . route_to('gestionarUsuarios'))->with('mensaje', '4');
-
+}else{
+$obj_administrador->borrarClienTabEmpleado($id);
+return redirect()->to(base_url() . route_to('gestionarUsuarios'))->with('mensaje', '4');
+}
 
 }
 
@@ -104,32 +107,7 @@ public function actualizarUsuarios(){
     return redirect()->to(base_url() . route_to('gestionarUsuarios'))->with('mensaje', '6');
 
 }
-
-public function liquidacionsoli(){
-  $objAdmin = new EmpleadosModel();
-
-
-
-
-
-
- //aca tomo los datos del formulario
-  $id     = $_POST['id'];
-  $codigo = $_POST['codigo'];
-  $descripcion  = $_POST['descripcion'];
-  $resumen  = $_POST['resumen'];
-  $empleado        = $_POST['empleado'];
-
-
-
-                    //aca ejecutamos el registro de la liquidacion
-    $objAdmin->crearSolicitud($id, $codigo, $descripcion, $resumen,  $empleado );
-          return redirect()->to(base_url() . route_to('inicioSesion'));
-   
-  
-}
-
-
+//vamos a la ruta de solicitu para llenar el formulario
 public function solicitud(){
  $obj_administrador = new EmpleadosModel();
  $empleados=$obj_administrador->mostrarEmpleados();
@@ -140,6 +118,85 @@ public function solicitud(){
  echo view('footer_header/footer');
 }
 
+//cuando se realiza la solicitud insertamos los datos en la bd
+public function liquidacionsoli(){
+  $objAdmin = new EmpleadosModel();
+
+
+//aca tomo los datos del formulario
+  $id     = $_POST['id'];
+  $codigo = $_POST['codigo'];
+  $descripcion  = $_POST['descripcion'];
+  $resumen  = $_POST['resumen'];
+  $empleado        = $_POST['empleado'];
+
+
+                   
+    $objAdmin->crearSolicitud($id, $codigo, $descripcion, $resumen,  $empleado );
+    return redirect()->to(base_url() . route_to('listarSolicitudesTotales'))->with('mensaje', '15');
+   
+  
+}
+
+public function listarSolicitudesTotales(){
+   $mensaje=session('mensaje');
+
+ 
+$objAdmin = new EmpleadosModel();
+$liquidaciones=$objAdmin->mostrarTodasLasLiquidaciones();
+ $datos = [
+    'mensaje'=>$mensaje,
+    'liquidaciones'=>$liquidaciones
+
+  ];
+
+echo view('footer_header/header');
+echo view('vistasdelsistema/listar_solicitudes.php', $datos);
+echo view('footer_header/footer');
+}
+
+
+
+public function editarSolicitud($id){
+ 
+$objAdmin = new EmpleadosModel();
+//para que puedan seleccionar un empleado
+$empleados=$objAdmin->mostrarEmpleados();
+$dat_para_poner_enformulario=$objAdmin->obtenerSolicitudPorRadicado($id);
+ $datos = [
+    'dat_para_poner_enformulario'=>$dat_para_poner_enformulario,
+    'empleados'=>$empleados
+
+  ];
+
+echo view('footer_header/header');
+echo view('vistasdelsistema/solicitud_editar.php', $datos);
+echo view('footer_header/footer');
 
 }
 
+public function actualizarSolicitud(){
+  $obj_administrador = new EmpleadosModel();
+
+
+//para actualizar si podemos poner un array asociativo
+    $datos=array(
+
+    $_POST['id'],
+    $_POST['codigo'],
+     $_POST['descripcion'],
+     $_POST['resumen'],
+      $_POST['empleado']
+    );
+    $obj_administrador->actualizarSolicitud($datos);
+    return redirect()->to(base_url() . route_to('listarSolicitudesTotales'))->with('mensaje', '17');
+
+}
+public function borrarSolicitud($id){
+$objAdmin = new EmpleadosModel();
+$objAdmin->borrarSolicitud($id);
+return redirect()->to(base_url() . route_to('listarSolicitudesTotales'))->with('mensaje', '18');
+
+}
+
+}

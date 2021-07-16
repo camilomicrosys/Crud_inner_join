@@ -38,7 +38,10 @@ public function mostrarUsuariosFormularioBuscador($search)
    $statement=$this->db->query("DELETE FROM empleado where ID='$id'");
    return $statement;
  }
- 
+ public function borrarClienteTabSolici($id){
+ $statement=$this->db->query("DELETE FROM solicitud where ID_EMPLEADO='$id'");
+   return $statement;
+ }
 
 public function agregarUsuarios($datos)
 {
@@ -63,8 +66,12 @@ public function actualizarUsuario($datos){
   $statement = $this->db->query("SELECT * FROM empleado");
   return $statement->getResult();
 }
+public function mostrarEmpleadosPorId($id){
+  $statement = $this->db->query("SELECT * FROM empleado where ID='$id'");
+  return $statement->getResult();
+}
 
-
+//inicio de las solicitues
  
  public function crearSolicitud($id, $codigo, $descripcion, $resumen,  $empleado ){
 
@@ -73,9 +80,29 @@ public function actualizarUsuario($datos){
   return $this->db->insertID();
 
 }
-
+//aca traemos todas las solicitudes en el buscados cuando colocan un  id del empleado
+public function traerLiquidacionPorIdEmpleado($id){
+  $statement = $this->db->query("SELECT CODIGO,DESCRIPCION,RESUMEN,NOMBRE,ID_EMPLEADO from solicitud inner join empleado on solicitud.ID_EMPLEADO=empleado.ID WHERE solicitud.ID_EMPLEADO='$id'");
+  return $statement->getResult();
 
   }
+  public function obtenerSolicitudPorRadicado($id){
+     $statement = $this->db->query("SELECT * FROM solicitud where ID='$id'");
+  return $statement->getResult();
+  }
+  public function mostrarTodasLasLiquidaciones(){
+ $statement = $this->db->query("SELECT solicitud.ID,CODIGO,DESCRIPCION,RESUMEN,NOMBRE,ID_EMPLEADO from solicitud inner join empleado on solicitud.ID_EMPLEADO=empleado.ID ");
+  return $statement->getResult();
+  }
+
+  public function actualizarSolicitud($datos){
+     $statement = $this->db->query("UPDATE solicitud SET  ID='$datos[0]',CODIGO='$datos[1]',DESCRIPCION='$datos[2]',RESUMEN='$datos[3]',ID_EMPLEADO='$datos[4]' where ID='$datos[0]' ");
+  }
+  public function borrarSolicitud($id){
+    $statement=$this->db->query("DELETE FROM solicitud where ID='$id'");
+   return $statement;
+  }
+}
 
   
 

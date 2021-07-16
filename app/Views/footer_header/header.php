@@ -167,7 +167,7 @@ if ($verificaRol === "Administrador") {
       <a href="index.php" class="brand-link">
         <img src="<?php echo $ruta . 'dashboard/dist/img/AdminLTELogo.png' ?>" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
         style="opacity: .8">
-        <span class="brand-text font-weight-light">LiquiCobros</span>
+        <span class="brand-text font-weight-light">Siste Konecta</span>
       </a>
       <!-- Sidebar -->
       <div class="sidebar">
@@ -210,13 +210,18 @@ if ($verificaRol === "Administrador") {
               <ul class="nav nav-treeview">
                
                 <li class="nav-item">
-                  <a href="<?php echo base_url() . route_to('LiquidacionJuridica'); ?>" class="nav-link">
+                  <a href="<?php echo base_url() . route_to('liquidarSolicitud'); ?>" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>realizar solicitud</p>
                   </a>
                 </li>
                
-
+                <li class="nav-item">
+                  <a href="<?php echo base_url() . route_to('listarSolicitudesTotales'); ?>" class="nav-link">
+                    <i class="fas fa-angle-double-right"></i>
+                    <p>Consulta solicitudes</p>
+                  </a>
+                </li>
 
 
              

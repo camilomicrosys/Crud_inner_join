@@ -55,11 +55,23 @@ $routes->post('/crear-usuarios', 'EmpleadosController::crearUsuarios', ['as' => 
 //actualizacion de usuarios
 $routes->post('/actualizar-usuarios', 'EmpleadosController::actualizarUsuarios', ['as' => 'actualizarUsuarios']);
 
+//realizar una solicitud
+$routes->get('/solicitud', 'EmpleadosController::solicitud', ['as' => 'liquidarSolicitud']);
+//crear la solicitur
 
-$routes->get('/solicitud', 'EmpleadosController::solicitud', ['as' => 'LiquidacionJuridica']);
+$routes->post('/crear-solicitud', 'EmpleadosController::liquidacionsoli', ['as' => 'liquidacionsoli']);
+//podemos ver las solicitudes en general
+$routes->get('/listar-solicitudes', 'EmpleadosController::listarSolicitudesTotales', ['as' => 'listarSolicitudesTotales']);
 
-$routes->post('/liquidacion-solicitud', 'EmpleadosController::liquidacionsoli', ['as' => 'liquidacionPj']);
+//editar una solicitud
+//podemos ver las solicitudes en general
+$routes->get('/editar-solicitudes/(:any)', 'EmpleadosController::editarSolicitud/$1', ['as' => 'editarSolicitud']);
 
+//actualizarSolicitud
+$routes->post('/actualizarSolicitud-solicitud', 'EmpleadosController::actualizarSolicitud', ['as' => 'actualizarSolicitud']);
+
+//Borrar-solicitud
+$routes->get('/Borrar-solicitud/(:any)', 'EmpleadosController::borrarSolicitud/$1', ['as' => 'borrarSolicitud']);
 
 
 

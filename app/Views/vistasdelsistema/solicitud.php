@@ -47,22 +47,22 @@ $iconoReportes       = $datos[14];
 						<div class="card" style="width: 18rem;">
 							<div class="card-body">
 
-								<form class="container" action="<?php echo base_url().route_to('liquidacionPj'); ?>" method="POST">
+								<form class="container" action="<?php echo base_url().route_to('liquidacionsoli'); ?>" method="POST">
 									<strong>id solicitud</strong><br>
 									<input class="form-control" name="id" type="text" placeholder="Digita el id" ><br>
 								  <strong>codigo de solicitud</strong>
-                                      <input name="codigo"  type="text"><br><br>
+                                      <input placeholder="escribe codigo" name="codigo"  type="text"><br><br>
 									<br>
 									<strong>Descripcion</strong>
-                                      <input name="descripcion"  type="text"><br><br>
+                                      <input placeholder="escribe descripcion" name="descripcion"  type="text"><br><br>
 									<br>
 									<strong>Resumen</strong>
-                                      <input name="resumen"  type="text"><br><br>
+                                      <input placeholder="escribe resumen" name="resumen"  type="text"><br><br>
 									<br>
                                     <strong>Empleado Solicitante</strong>
                                     <br>
                                   
-                                    <select class="form-control" name="empleado" id="">
+                                    <select class="form-control"  name="empleado" id="">
                                            <?php
 
 foreach ($empleados as $empleado) {?>
